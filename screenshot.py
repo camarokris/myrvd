@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+
 
 # Config
 screenshotDir = "Screenshots"
@@ -28,10 +30,10 @@ def __takeScreenshot(filePrefix, driver, wait, handle="Post"):
     return fileName
 
 def __setupDriver(url: str):
-    options = webdriver.FirefoxOptions()
+    options = Options()
     options.headless = False
-    options.enable_mobile = False
-    driver = webdriver.Firefox(options=options)
+    options.binary_location = "/usr/bin/google-chrome"
+    driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 10)
 
     driver.set_window_size(width=screenWidth, height=screenHeight)
