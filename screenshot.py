@@ -13,13 +13,21 @@ screenHeight = 800
 def getPostScreenshots(filePrefix, script):
     print("Taking screenshots...")
     driver, wait = __setupDriver(script.url)
-    script.titleSCFile = __takeScreenshot(filePrefix, driver, wait)
+    print(f'filePrefix: {filePrefix}')
+    for i in script.frames:
+        print(f'Frame: {i.commentId}')
+    postID = filePrefix.split('-')[-1]
+    script.titleSCFile = __takeScreenshot(filePrefix, driver, wait, f"t3_{postID}")
     for commentFrame in script.frames:
-        commentFrame.screenShotFile = __takeScreenshot(filePrefix, driver, wait, f"t1_{commentFrame.commentId}")
+        commentFrame.screenShotFile = __takeScreenshot(filePrefix, driver, wait, f"t1_{commentFrame.commentId}-comment-rtjson-content")
     driver.quit()
 
 def __takeScreenshot(filePrefix, driver, wait, handle="Post"):
     method = By.CLASS_NAME if (handle == "Post") else By.ID
+    print(f'Method: {method}')
+    print(f'Handle: {handle}')
+    with open("debug.html", "w") as f:
+        f.write(driver.page_source)
     search = wait.until(EC.presence_of_element_located((method, handle)))
     driver.execute_script("window.focus();")
 
